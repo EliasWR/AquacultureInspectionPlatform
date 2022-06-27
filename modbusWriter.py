@@ -60,10 +60,11 @@ class modbusClient():
             # numbers of satelites int 32  32008
             #connection check bool 32864
 
-            #checking if there is connection to the GPS by looking for change in the clock, Checks st$            if self.gpsTimeOutTime + self.timeOutCheckTime < time.time():
+            #checking if there is connection to the GPS by looking for change in the clock, Checks status every 2 seconds            
+            if self.gpsTimeOutTime + self.timeOutCheckTime < time.time():
                 if self.GpsTime == self.gpsTime0 or self.GpsTime == None:
                     if self.GpsTime == self.gpsTime0 or self.GpsTime == None:
-                    self.GpsEnabled = False
+                        self.GpsEnabled = False
                 else:
                     self.GpsEnabled = True
                     self.gpsTime0 = self.GpsTime
@@ -84,8 +85,8 @@ class modbusClient():
                 ##Read the cameraServoControlBit###
                 #self.newCameraPos=self.client.read_input_registers()
                 #if not self.newCameraPos == self.currentCamPos:
-                   # self.changeCameraPos(self.newCameraPos)
-                   # self.currentCameraPos=self.newCameraPos
+                    # self.changeCameraPos(self.newCameraPos)
+                    # self.currentCameraPos=self.newCameraPos
 
 
 
@@ -96,7 +97,7 @@ class modbusClient():
                 self.updateLocalGPsData(self.gpsreader.getGpsData())
 
                 # write modbus Number of satelites on register 32008 on wago plc
-                self.client.write_registers(32001, self.build16BitMessage(self.GpsNumberOfSat), unit=$
+                self.client.write_registers(32001, self.build16BitMessage(self.GpsNumberOfSat), unit=1)
                 # write modbus Speed on register 32004 on wago plc
 
                 self.client.write_registers(32002, self.build32BitMessage(self.GpsSpeed), unit=1)
