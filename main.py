@@ -1,24 +1,19 @@
 from VideoStream import videoStream
 
 from modbusTcp import startModbusDataThreads
+from modbusWriter import modbusClient
+from SerialReadGyro import SerialReadGyro
 import threading
-
+import serial
 
 
 def main():
-    modbusIpadress = "158.38.140.124"
-    t = threading.Thread(target=videoStream,name="thread1",args=("158.38.194.166",12342))
+    modbusIpadress = "192.168.0.112"
+    t = threading.Thread(target=videoStream,name="VidThread",args=("192.168.0.103",12345))
     t.start()
-    startModbusDataThreads(modbusIpadress)
+    #startModbusDataThreads(modbusIpadress)
+    modclient=modbusClient(modbusIpadress)
+    modclient.start()
 
-
-
-
-
-
-
-
-
-
-
-if __name__ == '__main__':main()
+if __name__ == '__main__':
+    main()

@@ -2,10 +2,12 @@
 import time
 import socket
 import cv2
-
+import rawCapture
 
 
 def videoStream(ipadress,port):
+
+
     cam = cv2.VideoCapture(0)
     cam.set(cv2.CAP_PROP_FPS,30)
     UDP_IP = ipadress
@@ -17,6 +19,7 @@ def videoStream(ipadress,port):
     # warmup camera
     time.sleep(0.1)
     while True:
+
         ret_val, img = cam.read(0)
 
         img = cv2.flip(img, 1)
@@ -28,9 +31,4 @@ def videoStream(ipadress,port):
 
     rawCapture.truncate(0)
 
-
-
 #if __name__ == "__main__": main()
-
-
-

@@ -15,7 +15,7 @@ def gpsReader():
     global Latitude
     global Heading
     global Longitude
-    global NumberOfsatelites #need to implemente
+    global NumberOfsatelites #need to implement
 
 
     Speed = 0
@@ -83,60 +83,56 @@ def modbusClient(iAdress):
         # numbers of satelites int 32  32008
         #connection check bool 32864
 
-        #checking if there is connection to the GPS by looking for change in the clock, Checks status each 2 sec
-        if gpsTimeOutTime + timeOutCheckTime < time.time():
+        #checking if there is connection to the GPS by looking for change in the clock, Checks status$        if gpsTimeOutTime + timeOutCheckTime < time.time():
             if GpsTime == gpsTime0 or GpsTime == None:
                 GpsEnabled = False
             else:
                 GpsEnabled = True
                 gpsTime0 = GpsTime
                 gpsTimeOutTime = time.time()
-        print("GPS ENABLED: "+str(GpsEnabled))
+            print("GPS ENABLED: "+str(GpsEnabled))
 
-        # Switching a bit for so the plc can notice connection loss. switching 1 time a sec.
-        if connCheckTimer + 1 < time.time():
-            if connCheckVar:
-                connCheckVar = False
-            else:
-                connCheckVar = True
-
-            client.write_coils(32864, [connCheckVar] * 8, unit=1)
-            connCheckTimer = time.time()
-
-        time.sleep(0.5)
-
-        # Gps enable flag on coil 32912
-        client.write_coils(32912, [GpsEnabled] * 8, unit=1)
-
-        # write modbus Number of satelites on register 32008 on wago plc
-        builder.add_16bit_int(NumberOfsatelites)
-        satelitesEnc = builder.to_registers()
-        client.write_registers(32008, satelitesEnc, unit=1)
-        builder.reset()
-
-        # write modbus Speed on register 32004 on wago plc
-        builder.add_32bit_float(Speed)
-        speedEnc = builder.to_registers()
-        client.write_registers(32004, speedEnc, unit=1)
-        builder.reset()
-
-        # write modbus Latitude on register 32012 on wago plc
-        builder.add_64bit_float(Latitude)
-        latEnc = builder.to_registers()
-        client.write_registers(32012, latEnc, unit=1)
-        builder.reset()
-
-        # write modbus Heading on register 32006 on wago plc
-        builder.add_64bit_float(Heading)
-        headEnc = builder.to_registers()
-        client.write_registers(32016, headEnc, unit=1)
-        builder.reset()
-
-        # write modbus Langitude on register 32000 on wago plc
-        builder.add_64bit_float(Longitude)
-        langEnc = builder.to_registers()
-        client.write_registers(32000, langEnc, unit=1)
-        builder.reset()
+            # Switching a bit for so the plc can notice connection loss. switching 1 time a sec.
+            if connCheckTimer + 1 < time.time():
+                if connCheckVar:
+                    connCheckVar = False
+                else:
+                    connCheckVar = True
+    
+                client.write_coils(32864, [connCheckVar] * 8, unit=1)
+                connCheckTimer = time.time()
+    
+            time.sleep(0.5)
+    
+            # Gps enable flag on coil 32912
+            client.write_coils(32912, [GpsEnabled] * 8, unit=1)
+    
+            # write modbus Number of satelites on register 32008 on wago plc
+            builder.add_16bit_int(NumberOfsatelites)
+            satelitesEnc = builder.to_registers()
+            client.write_registers(32008, satelitesEnc, unit=1)
+            builder.reset()
+    
+            # write modbus Speed on register 32004 on wago plc
+            builder.add_32bit_float(Speed)
+            speedEnc = builder.to_registers()
+            client.write_registers(32004, speedEnc, unit=1)
+            builder.reset()
+    
+            # write modbus Latitude on register 32012 on wago plc
+            builder.add_64bit_float(Latitude)
+            latEnc = builder.to_registers()
+            client.write_registers(32012, latEnc, unit=1)
+            builder.reset()
+    
+            # write modbus Heading on register 32006 on wago plc
+            builder.add_64bit_float(Heading)
+            headEnc = builder.to_registers()
+            # write modbus Langitude on register 32000 on wago plc
+            builder.add_64bit_float(Longitude)
+            langEnc = builder.to_registers()
+            client.write_registers(32000, langEnc, unit=1)
+            builder.reset()
 
 
 def startModbusDataThreads(modIp):
